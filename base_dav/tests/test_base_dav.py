@@ -29,34 +29,36 @@ class TestBaseDav(TransactionCase):
     def setUp(self):
         super().setUp()
 
-        self.collection = self.env["dav.collection"].create({
-            "name": "Test Collection",
-            "dav_type": "calendar",
-            "model_id": self.env.ref("base.model_res_users").id,
-            "domain": "[]",
-        })
+        self.collection = self.env["dav.collection"].create(
+            {
+                "name": "Test Collection",
+                "dav_type": "calendar",
+                "model_id": self.env.ref("base.model_res_users").id,
+                "domain": "[]",
+            }
+        )
 
-        self.dav_path = urlparse(self.collection.url).path.replace(PREFIX, '')
+        self.dav_path = urlparse(self.collection.url).path.replace(PREFIX, "")
 
         self.controller = Controller()
         self.env.user.password_crypt = ADMIN_PASSWORD
 
-        self.test_user = self.env["res.users"].create({
-            "login": "tester",
-            "name": "tester",
-        })
+        self.test_user = self.env["res.users"].create(
+            {
+                "login": "tester",
+                "name": "tester",
+            }
+        )
 
         self.auth_owner = self.auth_string(self.env.user, ADMIN_PASSWORD)
         self.auth_tester = self.auth_string(self.test_user, ADMIN_PASSWORD)
 
-        patcher = mock.patch('odoo.http.request')
+        patcher = mock.patch("odoo.http.request")
         self.addCleanup(patcher.stop)
         patcher.start()
 
     def auth_string(self, user, password):
-        return b64encode(
-            ("%s:%s" % (user.login, password)).encode()
-        ).decode()
+        return b64encode(("%s:%s" % (user.login, password)).encode()).decode()
 
     def init_mocks(self, coll_mock, login_mock, req_mock):
         req_mock.env = self.env
@@ -68,6 +70,7 @@ class TestBaseDav(TransactionCase):
 
         def side_effect(arg, _):
             return arg
+
         login_mock.side_effect = side_effect
         coll_mock.env = self.env
 
@@ -78,10 +81,12 @@ class TestBaseDav(TransactionCase):
             self.assertEqual(response.status_code, 403)
 
     def check_access(self, environ, auth_string, read, write):
-        environ.update({
-            "REQUEST_METHOD": "PROPFIND",
-            "HTTP_AUTHORIZATION": "Basic %s" % auth_string,
-        })
+        environ.update(
+            {
+                "REQUEST_METHOD": "PROPFIND",
+                "HTTP_AUTHORIZATION": "Basic %s" % auth_string,
+            }
+        )
         response = self.controller.handle_dav_request(self.dav_path)
         self.check_status_code(response, read)
 
@@ -127,23 +132,23 @@ class TestBaseDav(TransactionCase):
 class TestAuth(TransactionCase):
     def init_mock(self, auth_mock):
         def side_effect_login(dbname, user, password):
-            user = self.env['res.users'].search(['login', '=', user])
+            user = self.env["res.users"].search(["login", "=", user])
             return user.id if user else AccessDenied
-        auth_mock.env['res.users']._login.side_effect = side_effect_login
+
+        auth_mock.env["res.users"]._login.side_effect = side_effect_login
 
         def side_effect_browse(uid):
-            return self.env['res.users'].browse(uid)
-        auth_mock.env['res.users'].browse.side_effect = side_effect_browse
+            return self.env["res.users"].browse(uid)
+
+        auth_mock.env["res.users"].browse.side_effect = side_effect_browse
 
     def setUp(self):
         super().setUp()
-        self.test_user = self.env['res.users'].create({
-            "login": "tester",
-            "name": "tester",
-            "password": ADMIN_PASSWORD
-        })
+        self.test_user = self.env["res.users"].create(
+            {"login": "tester", "name": "tester", "password": ADMIN_PASSWORD}
+        )
 
     def test_login_tester(self, auth_mock):
         self.init_mock(auth_mock)
         auth = Auth(mock.ANY)
-        self.assertRaises(AccessDenied, auth.login, *('fake', 'fake'))
+        self.assertRaises(AccessDenied, auth.login, *("fake", "fake"))

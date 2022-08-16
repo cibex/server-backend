@@ -28,20 +28,20 @@ class BytesPretendingToBeString(bytes):
 
 class FileItem(Item):
     """this item tricks radicalev into serving a plain file"""
+
     @property
     def name(self):
-        return 'VCARD'
+        return "VCARD"
 
     def serialize(self):
         return BytesPretendingToBeString(base64.b64decode(self.item.datas))
 
     @property
     def etag(self):
-        return get_etag(self.item.datas.decode('ascii'))
+        return get_etag(self.item.datas.decode("ascii"))
 
 
 class Storage(BaseStorage):
-
     @classmethod
     @types.contextmanager
     def acquire_lock(cls, mode, user=None):
@@ -57,7 +57,7 @@ class Storage(BaseStorage):
         if len(components) > 2:
             # TODO: this probably better should happen in some dav.collection
             # function
-            if collection.collection.dav_type == 'files' and depth:
+            if collection.collection.dav_type == "files" and depth:
                 for href in collection.get_all():
                     yield collection.get(href)
                     return
@@ -65,17 +65,15 @@ class Storage(BaseStorage):
             return
         yield collection
         if depth and len(components) == 1:
-            for collection in request.env['dav.collection'].search([]):
-                yield cls('/'.join(components + ['/%d' % collection.id]))
+            for collection in request.env["dav.collection"].search([]):
+                yield cls("/".join(components + ["/%d" % collection.id]))
         if depth and len(components) == 2:
             for href in collection.list():
                 yield collection.get(href)
 
     @classmethod
     def _split_path(cls, path):
-        return list(filter(
-            None, os.path.normpath(path or '').strip('/').split('/')
-        ))
+        return list(filter(None, os.path.normpath(path or "").strip("/").split("/")))
 
     @classmethod
     def create_collection(cls, href, collection=None, props=None):
@@ -83,12 +81,9 @@ class Storage(BaseStorage):
 
 
 class Collection(BaseCollection):
-
     @classmethod
     def _split_path(cls, path):
-        return list(filter(
-            None, os.path.normpath(path or '').strip('/').split('/')
-        ))
+        return list(filter(None, os.path.normpath(path or "").strip("/").split("/")))
 
     @property
     def env(self):
@@ -100,43 +95,38 @@ class Collection(BaseCollection):
 
     @property
     def path(self):
-        return '/'.join(self.path_components) or '/'
+        return "/".join(self.path_components) or "/"
 
     def __init__(self, path):
         self.path_components = self._split_path(path)
-        self._path = '/'.join(self.path_components) or '/'
-        self.collection = self.env['dav.collection']
-        if len(self.path_components) >= 2 and str(
-                self.path_components[1]
-        ).isdigit():
-            self.collection = self.env['dav.collection'].browse(int(
-                self.path_components[1]
-            ))
+        self._path = "/".join(self.path_components) or "/"
+        self.collection = self.env["dav.collection"]
+        if len(self.path_components) >= 2 and str(self.path_components[1]).isdigit():
+            self.collection = self.env["dav.collection"].browse(
+                int(self.path_components[1])
+            )
 
     @staticmethod
     def _odoo_to_http_datetime(value):
-        return time.strftime(
-            '%a, %d %b %Y %H:%M:%S GMT',
-            value.timetuple()
-        )
+        return time.strftime("%a, %d %b %Y %H:%M:%S GMT", value.timetuple())
 
     def get_meta(self, key=None):
         if key is None:
             return {}
-        elif key == 'tag':
+        elif key == "tag":
             return self.collection.tag
-        elif key == 'D:displayname':
+        elif key == "D:displayname":
             return self.collection.display_name
-        elif key == 'C:supported-calendar-component-set':
-            return 'VTODO,VEVENT,VJOURNAL'
-        elif key == 'C:calendar-home-set':
+        elif key == "C:supported-calendar-component-set":
+            return "VTODO,VEVENT,VJOURNAL"
+        elif key == "C:calendar-home-set":
             return None
-        elif key == 'D:principal-URL':
+        elif key == "D:principal-URL":
             return None
-        elif key == 'ICAL:calendar-color':
+        elif key == "ICAL:calendar-color":
             # TODO: set in dav.collection
-            return '#48c9f4'
-        self.logger.warning('unsupported metadata %s', key)
+            return "#48c9f4"
+        self.logger.warning("unsupported metadata %s", key)
 
     def get(self, href):
         return self.collection.dav_get(self, href)

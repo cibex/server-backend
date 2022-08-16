@@ -13,7 +13,7 @@ except ImportError:
 
 class Rights(OwnerOnlyRights, OwnerWriteRights, AuthenticatedRights):
     def authorized(self, user, path):
-        if path == '/':
+        if path == "/":
             return True
 
         collection = Collection(path)
