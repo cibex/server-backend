@@ -13,19 +13,23 @@ try:
 except ImportError:
     radicale = None
 
-PREFIX = '/.dav'
+PREFIX = "/.dav"
 
 
 class Main(http.Controller):
     @http.route(
-        ['/.well-known/carddav', '/.well-known/caldav', '/.well-known/webdav'],
-        type='http', auth='none', csrf=False,
+        ["/.well-known/carddav", "/.well-known/caldav", "/.well-known/webdav"],
+        type="http",
+        auth="none",
+        csrf=False,
     )
     def handle_well_known_request(self):
         return werkzeug.utils.redirect(PREFIX, 301)
 
     @http.route(
-        [PREFIX, '%s/<path:davpath>' % PREFIX], type='http', auth='none',
+        [PREFIX, "%s/<path:davpath>" % PREFIX],
+        type="http",
+        auth="none",
         csrf=False,
     )
     def handle_dav_request(self, davpath=None):
@@ -33,19 +37,15 @@ class Main(http.Controller):
         for section, values in radicale.config.DEFAULT_CONFIG_SCHEMA.items():
             config.add_section(section)
             for key, data in values.items():
-                config.set(section, key, (data["value"] if type(data) == dict else data))
-        config.set('auth', 'type', 'odoo.addons.base_dav.radicale.auth')
-        config.set(
-            'storage', 'type', 'odoo.addons.base_dav.radicale.collection'
-        )
-        config.set(
-            'rights', 'type', 'odoo.addons.base_dav.radicale.rights'
-        )
-        config.set('web', 'type', 'none')
-        request.httprequest.environ['wsgi.errors'] = logging.getLogger('radicale')
-        application = radicale.Application(
-            config
-        )
+                config.set(
+                    section, key, (data["value"] if type(data) == dict else data)
+                )
+        config.set("auth", "type", "odoo.addons.base_dav.radicale.auth")
+        config.set("storage", "type", "odoo.addons.base_dav.radicale.collection")
+        config.set("rights", "type", "odoo.addons.base_dav.radicale.rights")
+        config.set("web", "type", "none")
+        request.httprequest.environ["wsgi.errors"] = logging.getLogger("radicale")
+        application = radicale.Application(config)
 
         response = None
 
@@ -57,9 +57,9 @@ class Main(http.Controller):
             dict(
                 request.httprequest.environ,
                 HTTP_X_SCRIPT_NAME=PREFIX,
-                PATH_INFO=davpath or '',
+                PATH_INFO=davpath or "",
             ),
             start_response,
         )
-        response.stream.write(result and result[0] or b'')
+        response.stream.write(result and result[0] or b"")
         return response
