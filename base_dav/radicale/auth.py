@@ -12,8 +12,8 @@ except ImportError:
 class Auth(BaseAuth):
     def login(self, user, password):
         env = request.env
-        uid = env['res.users']._login(env.cr.dbname, user, password, env)
-        login = env['res.users'].browse(uid).login
+        uid = env["res.users"]._login(env.cr.dbname, user, password, env)
+        login = env["res.users"].browse(uid).login
         if uid:
             request._env = env(user=uid)
         return login
