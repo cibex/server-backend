@@ -22,8 +22,8 @@ Available addons
 addon | version | maintainers | summary
 --- | --- | --- | ---
 [base_global_discount](base_global_discount/) | 15.0.1.0.0 |  | Base Global Discount
-[base_import_match](base_import_match/) | 15.0.1.0.0 |  | Try to avoid duplicates before importing
-[base_user_role](base_user_role/) | 15.0.0.3.0 | [![sebalix](https://github.com/sebalix.png?size=30px)](https://github.com/sebalix) [![jcdrubay](https://github.com/jcdrubay.png?size=30px)](https://github.com/jcdrubay) [![novawish](https://github.com/novawish.png?size=30px)](https://github.com/novawish) | User roles
+[base_import_match](base_import_match/) | 15.0.1.0.1 |  | Try to avoid duplicates before importing
+[base_user_role](base_user_role/) | 15.0.0.3.2 | [![sebalix](https://github.com/sebalix.png?size=30px)](https://github.com/sebalix) [![jcdrubay](https://github.com/jcdrubay.png?size=30px)](https://github.com/jcdrubay) [![novawish](https://github.com/novawish.png?size=30px)](https://github.com/novawish) | User roles
 
 [//]: # (end addons)
 
