@@ -4,12 +4,12 @@
 
 import datetime
 
-from odoo import api, fields, models, tools
-from odoo.tools.safe_eval import safe_eval, wrap_module
-
 import dateutil
 import vobject
 from dateutil import tz
+
+from odoo import api, fields, models, tools
+from odoo.tools.safe_eval import safe_eval, wrap_module
 
 
 class DavCollectionFieldMapping(models.Model):

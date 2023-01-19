@@ -6,12 +6,13 @@ import os
 from operator import itemgetter
 from urllib.parse import quote_plus
 
-from odoo import api, fields, models, tools
-
 import vobject
+
+from odoo import api, fields, models
 
 # pylint: disable=missing-import-error
 from odoo.tools.safe_eval import safe_eval
+
 from ..controllers.main import PREFIX
 from ..radicale.collection import Collection, FileItem, Item
 

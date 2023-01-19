@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <data>
         <record id="collection_addressbook" model="dav.collection">
@@ -17,12 +17,18 @@
             <field name="field_id" ref="base.field_res_partner_display_name" />
             <field name="collection">collection_addressbook</field>
         </record>
-        <record id="field_mapping_addressbook_photo" model="dav.collection.field_mapping">
-            <field name="photo"/>
+        <record
+            id="field_mapping_addressbook_photo"
+            model="dav.collection.field_mapping"
+        >
+            <field name="photo" />
             <field name="field_id" ref="base.field_res_partner_image" />
             <field name="collection">collection_addressbook</field>
         </record>
-        <record id="field_mapping_addressbook_email" model="dav.collection.field_mapping">
+        <record
+            id="field_mapping_addressbook_email"
+            model="dav.collection.field_mapping"
+        >
             <field name="name">email</field>
             <field name="field_id" ref="base.field_res_partner_email" />
             <field name="collection">collection_addressbook</field>

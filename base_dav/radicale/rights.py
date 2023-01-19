@@ -4,8 +4,8 @@
 from .collection import Collection
 
 try:
-    from radicale.rights.owner_only import Rights as OwnerOnlyRights
     from radicale.rights.authenticated import Rights as AuthenticatedRights
+    from radicale.rights.owner_only import Rights as OwnerOnlyRights
     from radicale.rights.owner_write import Rights as OwnerWriteRights
 except ImportError:
     AuthenticatedRights = OwnerOnlyRights = OwnerWriteRights = None

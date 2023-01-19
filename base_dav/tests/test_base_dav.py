@@ -10,8 +10,7 @@ from odoo.exceptions import AccessDenied
 from odoo.tests.common import TransactionCase
 from odoo.tools import mute_logger
 
-from ..controllers.main import PREFIX
-from ..controllers.main import Main as Controller
+from ..controllers.main import PREFIX, Main as Controller
 from ..radicale.auth import Auth
 
 MODULE_PATH = "odoo.addons.base_dav"

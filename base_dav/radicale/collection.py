@@ -8,9 +8,9 @@ import time
 from odoo.http import request
 
 try:
-    from radicale.storage import BaseCollection, BaseStorage
-    from radicale.item import Item, get_etag
     from radicale import types
+    from radicale.item import Item, get_etag
+    from radicale.storage import BaseCollection, BaseStorage
 except ImportError:
     BaseCollection = None
     BaseStorage = None

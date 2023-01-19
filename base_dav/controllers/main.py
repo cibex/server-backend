@@ -5,6 +5,7 @@ import logging
 from configparser import RawConfigParser as ConfigParser
 
 import werkzeug
+
 from odoo import http
 from odoo.http import request
 
