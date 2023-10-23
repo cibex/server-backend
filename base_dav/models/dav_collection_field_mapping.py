@@ -62,7 +62,7 @@ class DavCollectionFieldMapping(models.Model):
     def _from_vobject_code(self, child):
         self.ensure_one()
         context = {
-            "datetime": wrap_module(datetime, []),
+            "datetime": wrap_module(__import__("datetime"), ["datetime", "timedelta", "timezone"]),
             "dateutil": wrap_module(dateutil, []),
             "item": child,
             "result": None,
@@ -129,7 +129,7 @@ class DavCollectionFieldMapping(models.Model):
     def _to_vobject_code(self, record):
         self.ensure_one()
         context = {
-            "datetime": wrap_module(datetime, []),
+            "datetime": wrap_module(__import__("datetime"), ["datetime", "timedelta", "timezone"]),
             "dateutil": wrap_module(dateutil, []),
             "record": record,
             "result": None,
