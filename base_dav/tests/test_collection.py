@@ -1,12 +1,28 @@
 # Copyright 2019-2020 initOS GmbH <https://initos.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
+
+import contextlib
+import odoo
+
 from datetime import datetime, timedelta
 from unittest import mock
 
+from odoo.addons.website.tools import MockRequest as _MockRequest
 from odoo.tests.common import TransactionCase
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 
 from ..radicale.collection import Storage
+
+
+BASE_URL = "http://localhost:%s" % odoo.tools.config["http_port"]
+
+
+@contextlib.contextmanager
+def mock_request(env):
+    with _MockRequest(env) as request:
+        request.httprequest.url_root = BASE_URL + "/"
+        request.params = {}
+        yield request
 
 
 class TestCalendar(TransactionCase):
@@ -171,41 +187,40 @@ class TestCalendar(TransactionCase):
         rec = self.collection.get_record([self.record.login])
         self.assertEqual(rec, self.record)
 
-    @mock.patch("odoo.addons.base_dav.radicale.collection.request")
-    def test_collection(self, request_mock):
-        request_mock.env = self.env
-        collection_url = "/%s/%s" % (self.env.user.login, self.collection.id)
-        collection = list(Storage.discover(collection_url))[0]
+    def test_collection(self):
+        with mock_request(self.env):
+            collection_url = "/%s/%s" % (self.env.user.login, self.collection.id)
+            collection = list(Storage.discover(collection_url))[0]
 
-        # Try to get the test record
-        record_url = "%s/%s" % (collection_url, self.record.id)
-        self.assertIn(record_url, [c.href for c in collection.get_all()])
+            # Try to get the test record
+            record_url = "%s/%s" % (collection_url, self.record.id)
+            self.assertIn(record_url, [c.href for c in collection.get_all()])
 
-        # Get the test record using the URL and compare it
-        items = collection.get_multi([record_url])
-        item = items[0]
-        self.compare_record(item._vobject_item)
-        self.assertEqual(item.href, record_url)
+            # Get the test record using the URL and compare it
+            items = collection.get_multi([record_url])
+            item = items[0]
+            self.compare_record(item._vobject_item)
+            self.assertEqual(item.href, record_url)
 
-        # Get a non-existing record
-        self.assertFalse(collection.get_multi([record_url + "0"])[0])
+            # Get a non-existing record
+            self.assertFalse(collection.get_multi([record_url + "0"])[0])
 
-        # Get the record and alter it later
-        item = self.collection.to_vobject(self.record)
-        self.record.login = "different"
-        with self.assertRaises(AssertionError):
-            self.compare_record(item)
+            # Get the record and alter it later
+            item = self.collection.to_vobject(self.record)
+            self.record.login = "different"
+            with self.assertRaises(AssertionError):
+                self.compare_record(item)
 
-        # Restore the record
-        item = collection.upload(record_url, item)
-        self.compare_record(item._vobject_item)
+            # Restore the record
+            item = collection.upload(record_url, item)
+            self.compare_record(item._vobject_item)
 
-        # Delete an record
-        collection.delete(item.href)
-        self.assertFalse(self.record.exists())
+            # Delete an record
+            collection.delete(item.href)
+            self.assertFalse(self.record.exists())
 
-        # Create a new record
-        item = collection.upload(record_url + "0", item._vobject_item)
-        record = self.collection.get_record(collection._split_path(item.href))
-        self.assertNotEqual(record, self.record)
-        self.compare_record(item._vobject_item, record)
+            # Create a new record
+            item = collection.upload(record_url + "0", item._vobject_item)
+            record = self.collection.get_record(collection._split_path(item.href))
+            self.assertNotEqual(record, self.record)
+            self.compare_record(item._vobject_item, record)

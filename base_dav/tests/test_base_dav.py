@@ -2,10 +2,14 @@
 # Copyright 2019-2020 initOS GmbH <https://initos.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
+import contextlib
+import odoo
+
 from base64 import b64encode
 from unittest import mock
 from urllib.parse import urlparse
 
+from odoo.addons.website.tools import MockRequest as _MockRequest
 from odoo.exceptions import AccessDenied
 from odoo.tests.common import TransactionCase
 from odoo.tools import mute_logger
@@ -18,6 +22,16 @@ CONTROLLER_PATH = MODULE_PATH + ".controllers.main"
 RADICALE_PATH = MODULE_PATH + ".radicale"
 
 ADMIN_PASSWORD = "admin"
+
+BASE_URL = "http://localhost:%s" % odoo.tools.config["http_port"]
+
+
+@contextlib.contextmanager
+def mock_request(env):
+    with _MockRequest(env) as request:
+        request.httprequest.url_root = BASE_URL + "/"
+        request.params = {}
+        yield request
 
 
 @mute_logger("radicale")
@@ -127,27 +141,11 @@ class TestBaseDav(TransactionCase):
         self.check_access(environ, self.auth_tester, read=True, write=False)
 
 
-@mock.patch(RADICALE_PATH + ".auth.request")
 class TestAuth(TransactionCase):
-    def init_mock(self, auth_mock):
-        def side_effect_login(dbname, user, password):
-            user = self.env["res.users"].search(["login", "=", user])
-            return user.id if user else AccessDenied
-
-        auth_mock.env["res.users"]._login.side_effect = side_effect_login
-
-        def side_effect_browse(uid):
-            return self.env["res.users"].browse(uid)
-
-        auth_mock.env["res.users"].browse.side_effect = side_effect_browse
-
     def setUp(self):
         super().setUp()
-        self.test_user = self.env["res.users"].create(
-            {"login": "tester", "name": "tester", "password": ADMIN_PASSWORD}
-        )
 
-    def test_login_tester(self, auth_mock):
-        self.init_mock(auth_mock)
+    def test_login_tester(self):
         auth = Auth(mock.ANY)
-        self.assertRaises(AccessDenied, auth.login, *("fake", "fake"))
+        with mock_request(self.env):
+            self.assertRaises(AccessDenied, auth.login, *("fake", "fake"))
