@@ -3,16 +3,16 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 import contextlib
-import odoo
-
 from base64 import b64encode
 from unittest import mock
 from urllib.parse import urlparse
 
-from odoo.addons.website.tools import MockRequest as _MockRequest
+import odoo
 from odoo.exceptions import AccessDenied
 from odoo.tests.common import TransactionCase
 from odoo.tools import mute_logger
+
+from odoo.addons.website.tools import MockRequest as _MockRequest
 
 from ..controllers.main import PREFIX, Main as Controller
 from ..radicale.auth import Auth

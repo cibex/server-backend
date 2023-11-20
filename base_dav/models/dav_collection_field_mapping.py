@@ -62,11 +62,20 @@ class DavCollectionFieldMapping(models.Model):
     def _from_vobject_code(self, child):
         self.ensure_one()
         context = {
-            "datetime": wrap_module(__import__("datetime"), ["datetime", "timedelta", "timezone"]),
+            "datetime": wrap_module(
+                __import__("datetime"), ["datetime", "timedelta", "timezone"]
+            ),
             "dateutil": wrap_module(dateutil, []),
             "item": child,
             "result": None,
-            "tools": wrap_module(__import__("odoo.tools", fromlist=['odoo']), ["DEFAULT_SERVER_DATE_FORMAT", "DEFAULT_SERVER_TIME_FORMAT", "DEFAULT_SERVER_DATETIME_FORMAT"]),
+            "tools": wrap_module(
+                __import__("odoo.tools", fromlist=["odoo"]),
+                [
+                    "DEFAULT_SERVER_DATE_FORMAT",
+                    "DEFAULT_SERVER_TIME_FORMAT",
+                    "DEFAULT_SERVER_DATETIME_FORMAT",
+                ],
+            ),
             "tz": wrap_module(tz, []),
             "vobject": wrap_module(vobject, []),
         }
@@ -129,11 +138,20 @@ class DavCollectionFieldMapping(models.Model):
     def _to_vobject_code(self, record):
         self.ensure_one()
         context = {
-            "datetime": wrap_module(__import__("datetime"), ["datetime", "timedelta", "timezone"]),
+            "datetime": wrap_module(
+                __import__("datetime"), ["datetime", "timedelta", "timezone"]
+            ),
             "dateutil": wrap_module(dateutil, []),
             "record": record,
             "result": None,
-            "tools": wrap_module(__import__("odoo.tools", fromlist=['odoo']), ["DEFAULT_SERVER_DATE_FORMAT", "DEFAULT_SERVER_TIME_FORMAT", "DEFAULT_SERVER_DATETIME_FORMAT"]),
+            "tools": wrap_module(
+                __import__("odoo.tools", fromlist=["odoo"]),
+                [
+                    "DEFAULT_SERVER_DATE_FORMAT",
+                    "DEFAULT_SERVER_TIME_FORMAT",
+                    "DEFAULT_SERVER_DATETIME_FORMAT",
+                ],
+            ),
             "tz": wrap_module(tz, []),
             "vobject": wrap_module(vobject, []),
         }

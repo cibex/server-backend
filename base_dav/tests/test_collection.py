@@ -2,17 +2,15 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 import contextlib
-import odoo
-
 from datetime import datetime, timedelta
-from unittest import mock
 
-from odoo.addons.website.tools import MockRequest as _MockRequest
+import odoo
 from odoo.tests.common import TransactionCase
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 
-from ..radicale.collection import Storage
+from odoo.addons.website.tools import MockRequest as _MockRequest
 
+from ..radicale.collection import Storage
 
 BASE_URL = "http://localhost:%s" % odoo.tools.config["http_port"]
 
