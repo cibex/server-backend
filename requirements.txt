@@ -5,3 +5,4 @@ pymssql<=2.2.5
 radicale
 sqlalchemy
 sqlalchemy-hana
+vobject
