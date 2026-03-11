@@ -1,4 +1,7 @@
 
+[![Support the OCA](https://odoo-community.org/readme-banner-image)](https://odoo-community.org/get-involved?utm_source=repo-readme)
+
+# server-backend
 [![Runboat](https://img.shields.io/badge/runboat-Try%20me-875A7B.png)](https://runboat.odoo-community.org/builds?repo=OCA/server-backend&target_branch=16.0)
 [![Pre-commit Status](https://github.com/OCA/server-backend/actions/workflows/pre-commit.yml/badge.svg?branch=16.0)](https://github.com/OCA/server-backend/actions/workflows/pre-commit.yml?query=branch%3A16.0)
 [![Build Status](https://github.com/OCA/server-backend/actions/workflows/test.yml/badge.svg?branch=16.0)](https://github.com/OCA/server-backend/actions/workflows/test.yml?query=branch%3A16.0)
@@ -6,8 +9,6 @@
 [![Translation Status](https://translation.odoo-community.org/widgets/server-backend-16-0/-/svg-badge.svg)](https://translation.odoo-community.org/engage/server-backend-16-0/?utm_source=widget)
 
 <!-- /!\ do not modify above this line -->
-
-# server-backend
 
 Mainly base modules used by others
 
@@ -27,7 +28,7 @@ addon | version | maintainers | summary
 [base_external_dbsource_sqlite](base_external_dbsource_sqlite/) | 16.0.1.0.2 | <a href='https://github.com/anddago78'><img src='https://github.com/anddago78.png' width='32' height='32' style='border-radius:50%;' alt='anddago78'/></a> | External Database Source - SQLite
 [base_external_system](base_external_system/) | 16.0.1.0.0 |  | Data models allowing for connection to external systems.
 [base_global_discount](base_global_discount/) | 16.0.1.1.0 |  | Base Global Discount
-[base_group_backend](base_group_backend/) | 16.0.1.1.0 | <a href='https://github.com/FranzPoize'><img src='https://github.com/FranzPoize.png' width='32' height='32' style='border-radius:50%;' alt='FranzPoize'/></a> <a href='https://github.com/bealdav'><img src='https://github.com/bealdav.png' width='32' height='32' style='border-radius:50%;' alt='bealdav'/></a> | Group backend
+[base_group_backend](base_group_backend/) | 16.0.1.2.0 | <a href='https://github.com/FranzPoize'><img src='https://github.com/FranzPoize.png' width='32' height='32' style='border-radius:50%;' alt='FranzPoize'/></a> <a href='https://github.com/bealdav'><img src='https://github.com/bealdav.png' width='32' height='32' style='border-radius:50%;' alt='bealdav'/></a> | Group backend
 [base_import_match](base_import_match/) | 16.0.1.1.0 |  | Try to avoid duplicates before importing
 [base_portal_type](base_portal_type/) | 16.0.1.0.0 | <a href='https://github.com/hbrunn'><img src='https://github.com/hbrunn.png' width='32' height='32' style='border-radius:50%;' alt='hbrunn'/></a> | Base module to allow different types of portals
 [base_user_effective_permissions](base_user_effective_permissions/) | 16.0.1.0.0 | <a href='https://github.com/hbrunn'><img src='https://github.com/hbrunn.png' width='32' height='32' style='border-radius:50%;' alt='hbrunn'/></a> | Inspect effective permissions applying to a user
